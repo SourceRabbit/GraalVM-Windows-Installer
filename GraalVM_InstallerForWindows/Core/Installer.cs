@@ -4,6 +4,7 @@ using ICSharpCode.SharpZipLib.Zip;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -56,6 +57,10 @@ namespace GraalVM_InstallerForWindows
             Step3_SetEnvironmentalVariables();
             fWaitStepToFinish.WaitOne();
 
+            fWaitStepToFinish.Reset();
+            Step4_RunJarFix();
+            fWaitStepToFinish.WaitOne();
+
 
             // Set fFinished to true at the end!!!
             fFinished = true;
@@ -68,6 +73,12 @@ namespace GraalVM_InstallerForWindows
 
             string webPathToGraalVMZip = GraalVMVersionManager.GraalVMVersions[fVersionToInstall];
             string downloadPathToDisk = fInstallationFolder + "\\" + fVersionToInstall;
+
+            // Create installation folder if doesn't exit 
+            if(!Directory.Exists(fInstallationFolder))
+            {
+                Directory.CreateDirectory(fInstallationFolder);
+            }
 
             if (!File.Exists(downloadPathToDisk))
             {
@@ -191,6 +202,13 @@ namespace GraalVM_InstallerForWindows
             fWaitStepToFinish.Set();
         }
 
+        private void Step4_RunJarFix()
+        {
+            string appPath = AppDomain.CurrentDomain.BaseDirectory;
+            string jarFixPath = appPath + "JarFix\\jarfix.exe";
+            System.Diagnostics.Process.Start(jarFixPath);
+            fWaitStepToFinish.Set();
+        }
 
 
         public string Status

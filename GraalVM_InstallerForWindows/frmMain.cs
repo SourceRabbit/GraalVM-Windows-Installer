@@ -31,6 +31,7 @@ namespace GraalVM_InstallerForWindows
         private void frmMain_Load(object sender, EventArgs e)
         {
             labelStatus.Text = "";
+            this.Text = this.Text + " " + Config.fVersion;
         }
 
 

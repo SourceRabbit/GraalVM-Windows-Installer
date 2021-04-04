@@ -91,7 +91,7 @@ namespace GraalVM_InstallerForWindows
             this.textBoxInstallationPath.ReadOnly = true;
             this.textBoxInstallationPath.Size = new System.Drawing.Size(354, 26);
             this.textBoxInstallationPath.TabIndex = 4;
-            this.textBoxInstallationPath.Text = "C:\\GraalVMTest";
+            this.textBoxInstallationPath.Text = "C:\\GraalVM";
             // 
             // label4
             // 
