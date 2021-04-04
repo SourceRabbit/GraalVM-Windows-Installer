@@ -8,5 +8,8 @@ namespace GraalVM_InstallerForWindows.Core
 {
     class Config
     {
+        public static string fDownloadsListPath = "https://raw.githubusercontent.com/SourceRabbit/GraalVM-Windows-Installer/main/Downloads/DownloadsList.txt";
+
     }
+
 }
