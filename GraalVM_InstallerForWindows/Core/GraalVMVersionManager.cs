@@ -10,9 +10,8 @@ namespace GraalVM_InstallerForWindows.Core
     class GraalVMVersionManager
     {
 
-        private Dictionary<string,string> fGraalVMVersions = new Dictionary<string,string>();
+        private static Dictionary<string,string> fGraalVMVersions = new Dictionary<string,string>();
         
-
 
         public GraalVMVersionManager()
         {
@@ -24,7 +23,7 @@ namespace GraalVM_InstallerForWindows.Core
         /// <summary>
         /// Load GraalVM Version from the Config.fDownloadsListPath
         /// </summary>
-        private void GetGraalVMVersionsFromGitHub()
+        private static void GetGraalVMVersionsFromGitHub()
         {
             string response = WebTools.GetWebResponse(Config.fDownloadsListPath);
             string[] lines = response.Split('\n');
@@ -48,7 +47,7 @@ namespace GraalVM_InstallerForWindows.Core
 
 
 
-        public Dictionary<string,string> GraalVMVersions
+        public static Dictionary<string,string> GraalVMVersions
         {
             get
             {

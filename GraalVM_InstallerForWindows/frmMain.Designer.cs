@@ -29,16 +29,19 @@ namespace GraalVM_InstallerForWindows
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.label1 = new System.Windows.Forms.Label();
             this.comboBoxVersions = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.textBoxInstallationPath = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.buttonInstall = new System.Windows.Forms.Button();
             this.buttonExit = new System.Windows.Forms.Button();
             this.progressBarDownload = new System.Windows.Forms.ProgressBar();
             this.labelStatus = new System.Windows.Forms.Label();
+            this.buttonBrowse = new System.Windows.Forms.Button();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
             // 
             // label1
@@ -80,14 +83,15 @@ namespace GraalVM_InstallerForWindows
             this.label3.TabIndex = 3;
             this.label3.Text = "Installation Path:";
             // 
-            // textBox1
+            // textBoxInstallationPath
             // 
-            this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox1.Location = new System.Drawing.Point(156, 78);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(410, 26);
-            this.textBox1.TabIndex = 4;
-            this.textBox1.Text = "C:\\GraalVMTest";
+            this.textBoxInstallationPath.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxInstallationPath.Location = new System.Drawing.Point(156, 78);
+            this.textBoxInstallationPath.Name = "textBoxInstallationPath";
+            this.textBoxInstallationPath.ReadOnly = true;
+            this.textBoxInstallationPath.Size = new System.Drawing.Size(354, 26);
+            this.textBoxInstallationPath.TabIndex = 4;
+            this.textBoxInstallationPath.Text = "C:\\GraalVMTest";
             // 
             // label4
             // 
@@ -135,21 +139,40 @@ namespace GraalVM_InstallerForWindows
             this.labelStatus.TabIndex = 9;
             this.labelStatus.Text = "Status: ...";
             // 
+            // buttonBrowse
+            // 
+            this.buttonBrowse.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonBrowse.Location = new System.Drawing.Point(516, 78);
+            this.buttonBrowse.Name = "buttonBrowse";
+            this.buttonBrowse.Size = new System.Drawing.Size(49, 26);
+            this.buttonBrowse.TabIndex = 10;
+            this.buttonBrowse.Text = "...";
+            this.buttonBrowse.UseVisualStyleBackColor = true;
+            this.buttonBrowse.Click += new System.EventHandler(this.buttonBrowse_Click);
+            // 
+            // timer1
+            // 
+            this.timer1.Enabled = true;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(582, 243);
+            this.Controls.Add(this.buttonBrowse);
             this.Controls.Add(this.labelStatus);
             this.Controls.Add(this.progressBarDownload);
             this.Controls.Add(this.buttonExit);
             this.Controls.Add(this.buttonInstall);
             this.Controls.Add(this.label4);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.textBoxInstallationPath);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.comboBoxVersions);
             this.Controls.Add(this.label1);
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "frmMain";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -166,12 +189,14 @@ namespace GraalVM_InstallerForWindows
         private System.Windows.Forms.ComboBox comboBoxVersions;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox textBoxInstallationPath;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button buttonInstall;
         private System.Windows.Forms.Button buttonExit;
         private System.Windows.Forms.ProgressBar progressBarDownload;
         private System.Windows.Forms.Label labelStatus;
+        private System.Windows.Forms.Button buttonBrowse;
+        private System.Windows.Forms.Timer timer1;
     }
 }
 

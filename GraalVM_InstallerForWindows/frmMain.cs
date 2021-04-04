@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Net;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace GraalVM_InstallerForWindows
@@ -13,9 +14,12 @@ namespace GraalVM_InstallerForWindows
     public partial class frmMain : Form
     {
 
+        private bool fFinishedForUI = false;
+        private ManualResetEvent fManualResetEvent = new ManualResetEvent(false);
+        private Installer fInstaller;
         private string fInstallationFolder;
         private string fDownloadFilePath;
-        private GraalVMVersionManager fVersionManager;
+      
 
         public frmMain()
         {
@@ -32,8 +36,9 @@ namespace GraalVM_InstallerForWindows
 
         private void Initialize()
         {
-            fVersionManager = new GraalVMVersionManager();
-            Dictionary<string, string> versions = fVersionManager.GraalVMVersions;
+            fInstaller = new Installer();
+
+            Dictionary<string, string> versions = GraalVMVersionManager.GraalVMVersions;
 
             foreach (string key in versions.Keys)
             {
@@ -45,126 +50,66 @@ namespace GraalVM_InstallerForWindows
 
         private void buttonInstall_Click(object sender, EventArgs e)
         {
-
             comboBoxVersions.Enabled = false;
-            textBox1.Enabled = false;
+            textBoxInstallationPath.Enabled = false;
 
 
-            fInstallationFolder = textBox1.Text;
-            fDownloadFilePath = fInstallationFolder + "\\" + comboBoxVersions.Text;
-
-            //Step1_DownloadGraalVM();
-            //Step2_UnzipGraalVM();
-
-            Step3_InstallGraalVM();
-        }
-
-
-        private void Step1_DownloadGraalVM()
-        {
             buttonInstall.Enabled = false;
             buttonExit.Enabled = false;
 
-            string version = comboBoxVersions.SelectedItem.ToString();
-            string downloadURL = fVersionManager.GraalVMVersions[version];
 
-            labelStatus.Text = "Downloading " + version + ". Please wait...";
-
-            WebClient webClient = new WebClient();
-            webClient.DownloadProgressChanged += new DownloadProgressChangedEventHandler(Event_DownloadProgressChanged);
-            webClient.DownloadFileCompleted += new AsyncCompletedEventHandler(Event_DownloadFileCompleted);
-            webClient.DownloadFileAsync(new Uri(downloadURL), fDownloadFilePath);
+            fInstaller.InstallGraalVM(comboBoxVersions.SelectedItem.ToString(), textBoxInstallationPath.Text);
         }
 
+        
 
-        private void Step2_UnzipGraalVM()
+
+
+        /// <summary>
+        /// Let user to browse the folder he wants to install GrallVM
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void buttonBrowse_Click(object sender, EventArgs e)
         {
-            labelStatus.Text = "Extracting file. Please wait...";
-            progressBarDownload.Value = 10;
-
-            // Unzip the file
-            Stream st = new FileStream(fDownloadFilePath,FileMode.Open);
-            UnzipFile(st, fInstallationFolder+"\\");
-
-            Step3_InstallGraalVM();
-        }
-
-
-        private void Step3_InstallGraalVM()
-        {
-            labelStatus.Text = "Installing GraalVM...";
-
-            // Create the JAVA_HOME environmental variable
-            string environmentalVariableName = "JAVA_HOME";
-            string value = Environment.GetEnvironmentVariable(environmentalVariableName);
-
-            // If variable doesn't exit then create it
-            Environment.SetEnvironmentVariable(environmentalVariableName, fInstallationFolder, EnvironmentVariableTarget.Machine);
-            //Environment.SetEnvironmentVariable("MY_VARIABLE", "value", EnvironmentVariableTarget.Machine);
-
-        }
-
-
-        // Event to track the Download Progress
-        private void Event_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
-        {
-            progressBarDownload.Value = e.ProgressPercentage;
-        }
-
-        private void Event_DownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
-        {
-            labelStatus.Text = "Download finished !";
-            Step2_UnzipGraalVM();
-        }
-
-
-
-        public void UnzipFile(Stream zipStream, string outFolder)
-        {
-
-            if (outFolder.EndsWith("\\"))
+            using (var fbd = new FolderBrowserDialog())
             {
-                outFolder = outFolder.Substring(0, outFolder.Length - 1);
-            }
+                DialogResult result = fbd.ShowDialog();
 
-            using (var zipInputStream = new ZipInputStream(zipStream))
-            {
-                while (zipInputStream.GetNextEntry() is ZipEntry zipEntry)
+                if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
                 {
-                    string entryFileName = zipEntry.Name;
-                    entryFileName = entryFileName.Substring(entryFileName.IndexOf("/"));
-                    entryFileName =  entryFileName.Replace("/", "\\");
-                    
-                    // 4K is optimum
-                    var buffer = new byte[4096];
-
-                    // Manipulate the output filename here as desired.
-                    var fullZipToPath = outFolder + entryFileName;
-                    var directoryName = Path.GetDirectoryName(fullZipToPath);
-                    if (directoryName.Length > 0)
+                    textBoxInstallationPath.Text = fbd.SelectedPath;   
+                    if (textBoxInstallationPath.Text.EndsWith("\\"))
                     {
-                        Directory.CreateDirectory(directoryName);
-                    }
-
-                    // Skip directory entry
-                    if (Path.GetFileName(fullZipToPath).Length == 0)
-                    {
-                        continue;
-                    }
-
-                    // Unzip file in buffered chunks. This is just as fast as unpacking
-                    // to a buffer the full size of the file, but does not waste memory.
-                    // The "using" will close the stream even if an exception occurs.
-                    using (FileStream streamWriter = File.Create(fullZipToPath))
-                    {
-                        StreamUtils.Copy(zipInputStream, streamWriter, buffer);
+                        textBoxInstallationPath.Text = textBoxInstallationPath.Text.Substring(0, textBoxInstallationPath.Text.Length - 1);
                     }
                 }
             }
-
-            progressBarDownload.Value = 100;
         }
 
 
+
+        /// <summary>
+        /// This timer updates the UI during installation
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            
+            if (fInstaller != null)
+            {
+                labelStatus.Text = fInstaller.Status;
+                progressBarDownload.Value = fInstaller.Progress;
+
+                if(fInstaller.IsFinished && !fFinishedForUI)
+                {
+                    fFinishedForUI = true;
+                    MessageBox.Show(this, "Installation finished!\nPlease restart to take effect.", "Finished");
+                    this.Close();
+                }
+
+            }
+        }
     }
 }
