@@ -65,13 +65,17 @@ namespace GraalVM_InstallerForWindows
             Step2_UnzipGraalVM();
             fWaitStepToFinish.WaitOne();
 
-
             fWaitStepToFinish.Reset();
             Step3_SetEnvironmentalVariables();
             fWaitStepToFinish.WaitOne();
 
             fWaitStepToFinish.Reset();
             Step4_RunJarFix();
+            fWaitStepToFinish.WaitOne();
+
+
+            fWaitStepToFinish.Reset();
+            Step5_DeleteGraalVMDownloadedZip();
             fWaitStepToFinish.WaitOne();
 
 
@@ -187,7 +191,7 @@ namespace GraalVM_InstallerForWindows
 
         private void Step3_SetEnvironmentalVariables()
         {
-            fStatus = "Setting environmental variables...";
+            fStatus = "Setting environment variables...";
 
             // Create the JAVA_HOME environmental variable
             string environmentalVariableName = "JAVA_HOME";
@@ -223,6 +227,13 @@ namespace GraalVM_InstallerForWindows
             fWaitStepToFinish.Set();
         }
 
+
+        private void Step5_DeleteGraalVMDownloadedZip()
+        {
+            string downloadPathToDisk = fInstallationFolder + "\\" + fVersionToInstall;
+            File.Delete(downloadPathToDisk);
+            fWaitStepToFinish.Set();
+        }
 
         public string Status
         {

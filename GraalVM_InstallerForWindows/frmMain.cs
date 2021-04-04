@@ -30,7 +30,7 @@ namespace GraalVM_InstallerForWindows
         private bool fFinishedForUI = false;
         private ManualResetEvent fManualResetEvent = new ManualResetEvent(false);
         private Installer fInstaller;
-     
+
 
         public frmMain()
         {
@@ -62,8 +62,20 @@ namespace GraalVM_InstallerForWindows
 
         private void buttonInstall_Click(object sender, EventArgs e)
         {
+
+            // Check if directory is empy
+            if (Directory.Exists(textBoxInstallationPath.Text))
+            {
+                if (Directory.GetDirectories(textBoxInstallationPath.Text).Length > 0|| Directory.GetFiles(textBoxInstallationPath.Text).Length > 0)
+                {
+                    MessageBox.Show(this, "Directory " + textBoxInstallationPath.Text + " is not empty!\nUse an empty directory!", "Error");
+                    return;
+                }
+            }
+
             comboBoxVersions.Enabled = false;
             textBoxInstallationPath.Enabled = false;
+            buttonBrowse.Enabled = false;
 
 
             buttonInstall.Enabled = false;
@@ -87,7 +99,7 @@ namespace GraalVM_InstallerForWindows
 
                 if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
                 {
-                    textBoxInstallationPath.Text = fbd.SelectedPath;   
+                    textBoxInstallationPath.Text = fbd.SelectedPath;
                     if (textBoxInstallationPath.Text.EndsWith("\\"))
                     {
                         textBoxInstallationPath.Text = textBoxInstallationPath.Text.Substring(0, textBoxInstallationPath.Text.Length - 1);
@@ -105,20 +117,25 @@ namespace GraalVM_InstallerForWindows
         /// <param name="e"></param>
         private void timer1_Tick(object sender, EventArgs e)
         {
-            
+
             if (fInstaller != null)
             {
                 labelStatus.Text = fInstaller.Status;
                 progressBarDownload.Value = fInstaller.Progress;
 
-                if(fInstaller.IsFinished && !fFinishedForUI)
+                if (fInstaller.IsFinished && !fFinishedForUI)
                 {
                     fFinishedForUI = true;
-                    MessageBox.Show(this, "Installation finished!\nPlease restart to take effect.", "Finished");
+                    MessageBox.Show(this, "Installation finished!\nPlease reboot your computer for these changes to take effect.", "Finished");
                     this.Close();
                 }
 
             }
+        }
+
+        private void buttonExit_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }
