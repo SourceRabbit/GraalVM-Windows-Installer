@@ -7,7 +7,7 @@ GraalVM Windows Installer
 
 Downloads 
 ------
-Find the latest download on the following link:<br>
+Find the latest version on the following link:<br>
 https://github.com/SourceRabbit/GraalVM-Windows-Installer/releases
 
 <p align="center">
@@ -26,7 +26,7 @@ Oracle has announced that, effective January 2019, Java SE 8 public updates will
 You can find more information about GraalVM on GraalVM's website:<br>
 <a href="https://www.graalvm.org/">https://www.graalvm.org/</a>
 
-GraalVM Windows Installer is an open source project written in C# and developed with Visual Studio 2019.
+GraalVM Windows Installer is an open source project written in C#, developed with Visual Studio 2019.
 
 FAQ 
 ------
