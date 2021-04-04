@@ -1,4 +1,17 @@
-﻿using GraalVM_InstallerForWindows.Core;
+﻿/*
+Copyright (C) 2021  Nikos Siatras
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+SourceRabbit GCode Sender is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+You should have received a copy of the GNU General Public License
+along with this program.
+*/
+using GraalVM_InstallerForWindows.Core;
 using ICSharpCode.SharpZipLib.Core;
 using ICSharpCode.SharpZipLib.Zip;
 using System;
@@ -17,9 +30,7 @@ namespace GraalVM_InstallerForWindows
         private bool fFinishedForUI = false;
         private ManualResetEvent fManualResetEvent = new ManualResetEvent(false);
         private Installer fInstaller;
-        private string fInstallationFolder;
-        private string fDownloadFilePath;
-      
+     
 
         public frmMain()
         {
@@ -61,9 +72,6 @@ namespace GraalVM_InstallerForWindows
 
             fInstaller.InstallGraalVM(comboBoxVersions.SelectedItem.ToString(), textBoxInstallationPath.Text);
         }
-
-        
-
 
 
         /// <summary>
