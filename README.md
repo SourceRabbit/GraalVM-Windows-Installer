@@ -10,12 +10,18 @@ Downloads
 Find the latest download on the following link:<br>
 https://github.com/SourceRabbit/GraalVM-Windows-Installer/releases
 
+<p align="center">
+<img src="https://github.com/SourceRabbit/GraalVM-Windows-Installer/blob/main/Images/Screenshot.png" alt="GraalVM Installer for Windows">
+</p>
+
+
+
 About 
 ------
 
-The main reason we build GraalVM Windows Installer is to help our customers using Windows operating system install a <b>fast, reliable and completely free Java Virtual Machine</b> on their computer. 
+The main reason we built GraalVM Windows Installer is to help our customers using Windows operating system install a <b>fast, reliable and completely free Java Virtual Machine</b> on their computer. 
 
-Oracle has announced that, effective January 2019, Java SE 8 public updates will no longer be available for "Business, Commercial or Production use" without a commercial license. <b>GraalVM Community version is FREE</b>, it runs programs faster and has lots more useful features to developers.
+Oracle has announced that, effective January 2019, Java SE 8 public updates will no longer be available for "Business, Commercial or Production use" without a commercial license. <b>GraalVM Community version is FREE</b>, it runs programs faster and has lots of useful features for developers.
 
 You can find more information about GraalVM on GraalVM's website:<br>
 <a href="https://www.graalvm.org/">https://www.graalvm.org/</a>
