@@ -7,7 +7,7 @@ GraalVM Windows Installer
 
 Downloads 
 ------
-Find the latest download on the following link:<br>
+Find the latest version on the following link:<br>
 https://github.com/SourceRabbit/GraalVM-Windows-Installer/releases
 
 <p align="center">
