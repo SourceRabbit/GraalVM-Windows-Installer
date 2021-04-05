@@ -78,6 +78,7 @@ namespace GraalVM_InstallerForWindows
                 }
             }
 
+            progressBarDownload.Visible = true;
             comboBoxVersions.Enabled = false;
             textBoxInstallationPath.Enabled = false;
             buttonBrowse.Enabled = false;
