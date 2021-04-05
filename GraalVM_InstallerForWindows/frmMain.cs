@@ -42,7 +42,12 @@ namespace GraalVM_InstallerForWindows
         private void frmMain_Load(object sender, EventArgs e)
         {
             labelStatus.Text = "";
-            this.Text = this.Text + " " + Config.fVersion;
+
+            // Set version
+            System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
+            System.Diagnostics.FileVersionInfo fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(assembly.Location);
+            string version = fvi.FileVersion;
+            this.Text = this.Text + " " + version;
         }
 
 
