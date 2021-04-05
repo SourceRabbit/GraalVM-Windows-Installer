@@ -11,7 +11,7 @@ Find the latest version on the following link:<br>
 https://github.com/SourceRabbit/GraalVM-Windows-Installer/releases
 
 <p align="center">
-<img src="https://github.com/SourceRabbit/GraalVM-Windows-Installer/blob/main/Images/Screenshot1.2.png" alt="GraalVM Installer for Windows">
+<img src="https://github.com/SourceRabbit/GraalVM-Windows-Installer/blob/main/Images/Screenshot1.3.png" alt="GraalVM Installer for Windows">
 </p>
 
 
