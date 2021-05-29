@@ -223,7 +223,19 @@ namespace GraalVM_InstallerForWindows
         {
             string appPath = AppDomain.CurrentDomain.BaseDirectory;
             string jarFixPath = appPath + "JarFix\\jarfix.exe";
-            System.Diagnostics.Process.Start(jarFixPath);
+
+            ProcessStartInfo startInfo = new ProcessStartInfo();
+            startInfo.CreateNoWindow = false;
+            startInfo.UseShellExecute = false;
+            startInfo.FileName = jarFixPath;
+            startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            startInfo.Arguments = "/s";
+            using (Process exeProcess = Process.Start(startInfo))
+            {
+                exeProcess.WaitForExit();
+            }
+
+            //System.Diagnostics.Process.Start(jarFixPath);
             fWaitStepToFinish.Set();
         }
 
