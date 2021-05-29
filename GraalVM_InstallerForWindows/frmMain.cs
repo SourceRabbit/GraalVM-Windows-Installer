@@ -12,8 +12,6 @@ You should have received a copy of the GNU General Public License
 along with this program.
 */
 using GraalVM_InstallerForWindows.Core;
-using ICSharpCode.SharpZipLib.Core;
-using ICSharpCode.SharpZipLib.Zip;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
