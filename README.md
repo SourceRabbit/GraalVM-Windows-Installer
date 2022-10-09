@@ -4,9 +4,7 @@ GraalVM Installer for Windows OS
 <a href="https://www.sourcerabbit.com/"><img src="https://github.com/SourceRabbit/GraalVM-Windows-Installer/blob/main/Images/Banner.png" alt="SourceRabbit.com"></a>
 </p>
 
-SourceRabbit on Discord:<br>
 [![](https://dcbadge.vercel.app/api/server/nRKETyjJ7E)](https://discord.gg/nRKETyjJ7E)
-
 
 Downloads 
 ------
@@ -16,7 +14,6 @@ https://github.com/SourceRabbit/GraalVM-Windows-Installer/releases
 <p align="center">
 <img src="https://github.com/SourceRabbit/GraalVM-Windows-Installer/blob/main/Images/Screenshot1.3.png" alt="GraalVM Installer for Windows">
 </p>
-
 
 
 About 
