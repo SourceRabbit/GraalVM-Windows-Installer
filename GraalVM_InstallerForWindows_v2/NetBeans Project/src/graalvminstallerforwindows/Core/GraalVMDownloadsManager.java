@@ -30,7 +30,7 @@ public class GraalVMDownloadsManager
             String[] lines = data.split("\n");
             for (String line : lines)
             {
-                String[] parts = line.split("\\|");
+                String[] parts = line.trim().split("\\|");
                 if (parts.length > 1)
                 {
                     fDownloads.put(parts[0], parts[1]);

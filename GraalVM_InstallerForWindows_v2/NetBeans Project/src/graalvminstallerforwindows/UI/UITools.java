@@ -14,7 +14,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingWorker;
 
-
 /**
  *
  * @author Nikos Siatras
@@ -27,15 +26,13 @@ public class UITools
 
     }
 
-    
-
     public static void ShowPleaseWaitDialog(String dialogTitle, String description, javax.swing.JFrame parentForm, Runnable workToDo)
     {
         final JDialog loading = new JDialog(parentForm);
-        JPanel p1 = new JPanel(new GridLayout(3, 1));
-        p1.add(new JLabel("  "), BorderLayout.CENTER);
-        p1.add(new JLabel("\n\n    " + description + "    \n\n"), BorderLayout.CENTER);
-        p1.add(new JLabel("  "), BorderLayout.CENTER);
+        JPanel p1 = new JPanel(new GridLayout(1, 1));
+
+        p1.add(new JLabel("<html><p style='padding:15px'>" + description + "</p></html>"), BorderLayout.CENTER);
+
         loading.setTitle(dialogTitle);
         loading.setUndecorated(false);
         loading.getContentPane().add(p1);

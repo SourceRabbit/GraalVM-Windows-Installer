@@ -3,7 +3,16 @@ package graalvminstallerforwindows.UI;
 import graalvminstallerforwindows.Core.GraalVMDownloadsManager;
 import graalvminstallerforwindows.Core.Settings;
 import java.awt.Point;
+import java.io.BufferedOutputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Paths;
 import java.util.HashMap;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
 /**
@@ -46,8 +55,8 @@ public class frmMain extends javax.swing.JFrame
         jTextField1 = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        jButtonInstall = new javax.swing.JButton();
+        jButtonExit = new javax.swing.JButton();
         jProgressBar1 = new javax.swing.JProgressBar();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -66,6 +75,8 @@ public class frmMain extends javax.swing.JFrame
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel2.setText("Graal VM Version:");
+
+        jComboBoxDownloads.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
         jLabel3.setText("Select the GraalVM version you want to install on this computer");
@@ -101,8 +112,8 @@ public class frmMain extends javax.swing.JFrame
                                 .addComponent(jComboBoxDownloads, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(1, 1, 1)
-                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addContainerGap(17, Short.MAX_VALUE))))
@@ -126,18 +137,27 @@ public class frmMain extends javax.swing.JFrame
                 .addContainerGap(15, Short.MAX_VALUE))
         );
 
-        jButton2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jButton2.setText("Install");
-        jButton2.addActionListener(new java.awt.event.ActionListener()
+        jButtonInstall.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jButtonInstall.setText("Install");
+        jButtonInstall.addActionListener(new java.awt.event.ActionListener()
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
             {
-                jButton2ActionPerformed(evt);
+                jButtonInstallActionPerformed(evt);
             }
         });
 
-        jButton3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jButton3.setText("Exit");
+        jButtonExit.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jButtonExit.setText("Exit");
+        jButtonExit.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                jButtonExitActionPerformed(evt);
+            }
+        });
+
+        jProgressBar1.setStringPainted(true);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -147,9 +167,9 @@ public class frmMain extends javax.swing.JFrame
                 .addGap(20, 20, 20)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButtonInstall, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButtonExit, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -167,28 +187,84 @@ public class frmMain extends javax.swing.JFrame
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jButton2)
-                        .addComponent(jButton3))
+                        .addComponent(jButtonInstall)
+                        .addComponent(jButtonExit))
                     .addComponent(jProgressBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(21, Short.MAX_VALUE))
+                .addContainerGap(17, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButton2ActionPerformed
-    {//GEN-HEADEREND:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+    private void jButtonInstallActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonInstallActionPerformed
+    {//GEN-HEADEREND:event_jButtonInstallActionPerformed
+
+        Runnable updatethread = () ->
+        {
+            try
+            {
+                final String remoteFilePath = GraalVMDownloadsManager.getAvailableDownloads().get(jComboBoxDownloads.getSelectedItem().toString());
+                final String savePath = jTextField1.getText() + "\\GraalVMDownload.zip";
+
+                //final URL url = new URL(remoteFilePath);
+                URL url = new URI(remoteFilePath).toURL();
+
+                HttpURLConnection httpConnection = (HttpURLConnection) (url.openConnection());
+                long completeFileSize = httpConnection.getContentLength();
+                java.io.BufferedInputStream in = new java.io.BufferedInputStream(httpConnection.getInputStream());
+                java.io.FileOutputStream fos = new java.io.FileOutputStream(savePath);
+                java.io.BufferedOutputStream bout = new BufferedOutputStream(fos, 1024);
+                byte[] data = new byte[1024];
+                long downloadedFileSize = 0;
+
+                int x1 = 0;
+                while ((x1 = in.read(data, 0, 1024)) >= 0)
+                {
+                    downloadedFileSize += x1;
+
+                    // Update Progress
+                    final double currentProgress = (((double) downloadedFileSize * 100.00d) / (double) completeFileSize);
+                    // update progress bar
+                    SwingUtilities.invokeLater(() ->
+                    {
+                        jProgressBar1.setValue((int) currentProgress);
+                        jProgressBar1.setString(String.format("%.2f", currentProgress) + "%");
+                    });
+                    bout.write(data, 0, x1);
+                }
+                bout.close();
+                in.close();
+            }
+            catch (IOException | URISyntaxException ex)
+            {
+                System.err.println(ex.getMessage());
+            }
+
+        };
+        new Thread(updatethread).start();
+    }//GEN-LAST:event_jButtonInstallActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt)//GEN-FIRST:event_formWindowOpened
     {//GEN-HEADEREND:event_formWindowOpened
-        HashMap<String, String> availableDownloads = GraalVMDownloadsManager.getAvailableDownloads();
-        for (String key : availableDownloads.keySet())
+        UITools.ShowPleaseWaitDialog("Please Wait", "Updating downloads list from:<br>" + Settings.fDownloadsListFile + "", this, new Runnable()
         {
-            jComboBoxDownloads.addItem(key);
+            @Override
+            public void run()
+            {
+                HashMap<String, String> availableDownloads = GraalVMDownloadsManager.getAvailableDownloads();
+                for (String key : availableDownloads.keySet())
+                {
+                    jComboBoxDownloads.addItem(key);
+                }
+            }
         }
+        );
     }//GEN-LAST:event_formWindowOpened
+
+    private void jButtonExitActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonExitActionPerformed
+    {//GEN-HEADEREND:event_jButtonExitActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_jButtonExitActionPerformed
 
     /**
      * @param args the command line arguments
@@ -214,8 +290,8 @@ public class frmMain extends javax.swing.JFrame
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButtonExit;
+    private javax.swing.JButton jButtonInstall;
     private javax.swing.JComboBox<String> jComboBoxDownloads;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
