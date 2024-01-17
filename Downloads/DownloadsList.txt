@@ -1,3 +1,2 @@
-GraalVM Community Edition JDK 21.0.2 - Java 21|https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-21.0.2/graalvm-community-jdk-21.0.2_windows-x64_bin.zip
-GraalVM Community Edition JDK 17.0.9 - Java 17|https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-17.0.9/graalvm-community-jdk-17.0.9_windows-x64_bin.zip
-
+GraalVM Java 21|https://download.oracle.com/graalvm/21/latest/graalvm-jdk-21_windows-x64_bin.zip
+GraalVM Java 17|https://download.oracle.com/graalvm/17/latest/graalvm-jdk-17_windows-x64_bin.zip
