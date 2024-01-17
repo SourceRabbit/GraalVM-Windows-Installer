@@ -1,6 +1,3 @@
-GraalVM Community Edition 22.3.2 - Java 17|https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.2/graalvm-ce-java17-windows-amd64-22.3.2.zip
-GraalVM Community Edition 22.3.2 - Java 11|https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.2/graalvm-ce-java11-windows-amd64-22.3.2.zip
-GraalVM Community Edition 22.3.0 - Java 19|https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.0/graalvm-ce-java19-windows-amd64-22.3.0.zip
-GraalVM Community Edition 22.3.0 - Java 17|https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.0/graalvm-ce-java17-windows-amd64-22.3.0.zip
-GraalVM Community Edition 22.3.0 - Java 11|https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.0/graalvm-ce-java11-windows-amd64-22.3.0.zip
 GraalVM Community Edition JDK 21.0.2 - Java 21|https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-21.0.2/graalvm-community-jdk-21.0.2_windows-x64_bin.zip
+GraalVM Community Edition JDK 17.0.9 - Java 17|https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-17.0.9/graalvm-community-jdk-17.0.9_windows-x64_bin.zip
+
