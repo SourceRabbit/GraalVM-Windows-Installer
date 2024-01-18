@@ -2,17 +2,9 @@ package graalvminstallerforwindows.UI;
 
 import graalvminstallerforwindows.Core.GraalVMDownloadsManager;
 import graalvminstallerforwindows.Core.Settings;
-import java.awt.Point;
-import java.io.BufferedOutputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Paths;
+import java.io.File;
 import java.util.HashMap;
-import javax.swing.SwingUtilities;
+import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
 /**
@@ -31,8 +23,7 @@ public class frmMain extends javax.swing.JFrame
 
         this.setTitle(this.getTitle() + " v" + Settings.fAppVersion);
 
-        final Point pos = UITools.getPositionForFormToOpenInMiddleOfScreen(this.getSize().width, this.getSize().height);
-        this.setLocation((int) pos.getX(), (int) pos.getY());
+        this.setLocationRelativeTo(null);
 
     }
 
@@ -52,7 +43,7 @@ public class frmMain extends javax.swing.JFrame
         jComboBoxDownloads = new javax.swing.JComboBox<>();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        jTextFieldInstallationPath = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
         jButtonInstall = new javax.swing.JButton();
@@ -85,8 +76,8 @@ public class frmMain extends javax.swing.JFrame
         jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel4.setText("Installation Path:");
 
-        jTextField1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jTextField1.setText("C:\\GraalVM2");
+        jTextFieldInstallationPath.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jTextFieldInstallationPath.setText("C:\\GraalVM2");
 
         jButton1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jButton1.setText("...");
@@ -114,7 +105,7 @@ public class frmMain extends javax.swing.JFrame
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jTextFieldInstallationPath, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addContainerGap(17, Short.MAX_VALUE))))
@@ -132,7 +123,7 @@ public class frmMain extends javax.swing.JFrame
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(jButton1)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTextFieldInstallationPath, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel5)
                 .addContainerGap(15, Short.MAX_VALUE))
@@ -200,49 +191,46 @@ public class frmMain extends javax.swing.JFrame
     private void jButtonInstallActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonInstallActionPerformed
     {//GEN-HEADEREND:event_jButtonInstallActionPerformed
 
-        Runnable updatethread = () ->
+        // Check if installation directory exists and it is empty!
+        File installationDir = new File(jTextFieldInstallationPath.getText());
+
+        try
         {
-            try
+            if (installationDir.exists())
             {
-                final String remoteFilePath = GraalVMDownloadsManager.getAvailableDownloads().get(jComboBoxDownloads.getSelectedItem().toString());
-                final String savePath = jTextField1.getText() + "\\GraalVMDownload.zip";
-
-                //final URL url = new URL(remoteFilePath);
-                URL url = new URI(remoteFilePath).toURL();
-
-                HttpURLConnection httpConnection = (HttpURLConnection) (url.openConnection());
-                long completeFileSize = httpConnection.getContentLength();
-                java.io.BufferedInputStream in = new java.io.BufferedInputStream(httpConnection.getInputStream());
-                java.io.FileOutputStream fos = new java.io.FileOutputStream(savePath);
-                java.io.BufferedOutputStream bout = new BufferedOutputStream(fos, 1024);
-                byte[] data = new byte[1024];
-                long downloadedFileSize = 0;
-
-                int x1 = 0;
-                while ((x1 = in.read(data, 0, 1024)) >= 0)
+                // Make sure directory is empty
+                boolean dirIsEmpty = installationDir.listFiles().length == 0;
+                if (!dirIsEmpty)
                 {
-                    downloadedFileSize += x1;
-
-                    // Update Progress
-                    final double currentProgress = (((double) downloadedFileSize * 100.00d) / (double) completeFileSize);
-                    // update progress bar
-                    SwingUtilities.invokeLater(() ->
-                    {
-                        jProgressBar1.setValue((int) currentProgress);
-                        jProgressBar1.setString(String.format("%.2f", currentProgress) + "%");
-                    });
-                    bout.write(data, 0, x1);
+                    JOptionPane.showMessageDialog(this, "Directory '" + jTextFieldInstallationPath.getText() + "' is not empty!\nDelete any files and directories inside the installation path and try again.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
                 }
-                bout.close();
-                in.close();
             }
-            catch (IOException | URISyntaxException ex)
+            else
             {
-                System.err.println(ex.getMessage());
+                // Create directory
+                installationDir.mkdir();
             }
+        }
+        catch (Exception ex)
+        {
+            JOptionPane.showMessageDialog(this, "Cannot access or create directory '" + jTextFieldInstallationPath.getText() + "'", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
-        };
-        new Thread(updatethread).start();
+        try
+        {
+            final String remoteFilePath = GraalVMDownloadsManager.getAvailableDownloads().get(jComboBoxDownloads.getSelectedItem().toString());
+            final String savePath = jTextFieldInstallationPath.getText() + "\\GraalVMDownload.zip";
+
+            frmDownloadFile frm = new frmDownloadFile(this, true, remoteFilePath, savePath);
+            frm.setVisible(true);
+        }
+        catch (Exception ex)
+        {
+            System.err.println(ex.getMessage());
+        }
+
     }//GEN-LAST:event_jButtonInstallActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt)//GEN-FIRST:event_formWindowOpened
@@ -301,6 +289,6 @@ public class frmMain extends javax.swing.JFrame
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JProgressBar jProgressBar1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField jTextFieldInstallationPath;
     // End of variables declaration//GEN-END:variables
 }
