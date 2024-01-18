@@ -20,6 +20,7 @@ public class frmDownloadFile extends javax.swing.JDialog
     private final String fPathToSaveFile;
 
     private Thread fDownloadThread;
+    private boolean fDownloadFinishedSucessfully = false;
     private boolean fKeepDownloadThreadRunning = false;
     private ManualResetEvent fWaitForDownloadToFinish;
 
@@ -38,10 +39,16 @@ public class frmDownloadFile extends javax.swing.JDialog
 
         fURLOfFileToDownload = urlOfFileToDownload;
         fPathToSaveFile = pathToSaveTheFile;
-
         jLabelFilePath.setText("<html><p style=\"width:280px\">" + fURLOfFileToDownload + "</p></html>");
 
         this.setLocationRelativeTo(parent);
+    }
+
+    public boolean OpenAndDownloadFile()
+    {
+        fDownloadFinishedSucessfully = true;
+        this.setVisible(true);
+        return fDownloadFinishedSucessfully;
     }
 
     @SuppressWarnings("unchecked")
@@ -120,6 +127,7 @@ public class frmDownloadFile extends javax.swing.JDialog
     private void jButtonCancelActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonCancelActionPerformed
     {//GEN-HEADEREND:event_jButtonCancelActionPerformed
         fKeepDownloadThreadRunning = false;
+        fDownloadFinishedSucessfully = false;
         fWaitForDownloadToFinish.WaitOne();
         this.dispose();
     }//GEN-LAST:event_jButtonCancelActionPerformed

@@ -1,8 +1,14 @@
 package graalvminstallerforwindows.UI;
 
+import graalvminstallerforwindows.Core.FileUtils;
 import graalvminstallerforwindows.Core.GraalVMDownloadsManager;
 import graalvminstallerforwindows.Core.Settings;
+import graalvminstallerforwindows.Core.Unzipper;
+import java.awt.HeadlessException;
 import java.io.File;
+import java.io.FilenameFilter;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
@@ -14,17 +20,21 @@ import javax.swing.UIManager;
 public class frmMain extends javax.swing.JFrame
 {
 
+    public static frmMain fInstance;
+    private FileUtils fFileUtils;
+
     /**
      * Creates new form frmMain
      */
     public frmMain()
     {
         initComponents();
+        frmMain.fInstance = this;
+
+        fFileUtils = new FileUtils();
 
         this.setTitle(this.getTitle() + " v" + Settings.fAppVersion);
-
         this.setLocationRelativeTo(null);
-
     }
 
     /**
@@ -48,7 +58,6 @@ public class frmMain extends javax.swing.JFrame
         jLabel5 = new javax.swing.JLabel();
         jButtonInstall = new javax.swing.JButton();
         jButtonExit = new javax.swing.JButton();
-        jProgressBar1 = new javax.swing.JProgressBar();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("GraalVM Installer for Windows");
@@ -149,8 +158,6 @@ public class frmMain extends javax.swing.JFrame
             }
         });
 
-        jProgressBar1.setStringPainted(true);
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -162,8 +169,7 @@ public class frmMain extends javax.swing.JFrame
                         .addComponent(jButtonInstall, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButtonExit, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(243, 243, 243))
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
@@ -177,11 +183,9 @@ public class frmMain extends javax.swing.JFrame
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jButtonInstall)
-                        .addComponent(jButtonExit))
-                    .addComponent(jProgressBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButtonInstall)
+                    .addComponent(jButtonExit))
                 .addContainerGap(17, Short.MAX_VALUE))
         );
 
@@ -191,63 +195,81 @@ public class frmMain extends javax.swing.JFrame
     private void jButtonInstallActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonInstallActionPerformed
     {//GEN-HEADEREND:event_jButtonInstallActionPerformed
 
+        final String installationPath = jTextFieldInstallationPath.getText();
+
         // Check if installation directory exists and it is empty!
-        File installationDir = new File(jTextFieldInstallationPath.getText());
+        File installationDir = new File(installationPath);
 
         try
         {
-            if (installationDir.exists())
+            if (!fFileUtils.CheckIfDirectoryExists(installationPath))
             {
-                // Make sure directory is empty
-                boolean dirIsEmpty = installationDir.listFiles().length == 0;
-                if (!dirIsEmpty)
-                {
-                    JOptionPane.showMessageDialog(this, "Directory '" + jTextFieldInstallationPath.getText() + "' is not empty!\nDelete any files and directories inside the installation path and try again.", "Error", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-            }
-            else
-            {
-                // Create directory
+                // Create installationDir if not exists
                 installationDir.mkdir();
+            }
+
+            if (!fFileUtils.CheckIfDirectoryExistsAndItIsEmpty(installationPath))
+            {
+                JOptionPane.showMessageDialog(this, "Directory '" + installationPath + "' is not empty!\nDelete any files and directories inside the installation path and try again.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
             }
         }
         catch (Exception ex)
         {
-            JOptionPane.showMessageDialog(this, "Cannot access or create directory '" + jTextFieldInstallationPath.getText() + "'", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Cannot access or create directory '" + installationPath + "'", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        try
-        {
-            final String remoteFilePath = GraalVMDownloadsManager.getAvailableDownloads().get(jComboBoxDownloads.getSelectedItem().toString());
-            final String savePath = jTextFieldInstallationPath.getText() + "\\GraalVMDownload.zip";
+        // Step 1 - Download File
+        boolean downloadFinishedSuccessfully = true;
+        final String remoteFilePath = GraalVMDownloadsManager.getAvailableDownloads().get(jComboBoxDownloads.getSelectedItem().toString());
+        final String savePath = installationPath + "\\GraalVMDownload.zip";
 
-            frmDownloadFile frm = new frmDownloadFile(this, true, remoteFilePath, savePath);
-            frm.setVisible(true);
-        }
-        catch (Exception ex)
+        frmDownloadFile frm = new frmDownloadFile(this, true, remoteFilePath, savePath);
+        downloadFinishedSuccessfully = frm.OpenAndDownloadFile();
+
+        // Step 2 - Unzip GraalVM File
+        if (downloadFinishedSuccessfully)
         {
-            System.err.println(ex.getMessage());
+            UITools.ShowPleaseWaitDialog("Please wait", "Extracting GraalVMDownload.zip<br>This can take a while...", this, () ->
+            {
+                try
+                {
+                    Unzipper.Unzip(savePath, jTextFieldInstallationPath.getText());
+                }
+                catch (Exception ex)
+                {
+                    JOptionPane.showMessageDialog(frmMain.fInstance, "Cannot unzip file '" + savePath + "'", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            });
         }
+
+        // Step 3 - Move unziped files to jTextFieldInstallationPath.getText()
+        String[] directories = installationDir.list(new FilenameFilter()
+        {
+            @Override
+            public boolean accept(File current, String name)
+            {
+                return new File(current, name).isDirectory();
+            }
+        });
+
+        String sourceDir = installationPath + "\\" + directories[0];
+        fFileUtils.MoveDirContentsToOtherDir(sourceDir, installationPath);
+
 
     }//GEN-LAST:event_jButtonInstallActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt)//GEN-FIRST:event_formWindowOpened
     {//GEN-HEADEREND:event_formWindowOpened
-        UITools.ShowPleaseWaitDialog("Please Wait", "Updating downloads list from:<br>" + Settings.fDownloadsListFile + "", this, new Runnable()
+        UITools.ShowPleaseWaitDialog("Please Wait", "Updating downloads list from:<br>" + Settings.fDownloadsListFile + "", this, () ->
         {
-            @Override
-            public void run()
+            HashMap<String, String> availableDownloads = GraalVMDownloadsManager.getAvailableDownloads();
+            for (String key : availableDownloads.keySet())
             {
-                HashMap<String, String> availableDownloads = GraalVMDownloadsManager.getAvailableDownloads();
-                for (String key : availableDownloads.keySet())
-                {
-                    jComboBoxDownloads.addItem(key);
-                }
+                jComboBoxDownloads.addItem(key);
             }
-        }
-        );
+        });
     }//GEN-LAST:event_formWindowOpened
 
     private void jButtonExitActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonExitActionPerformed
@@ -260,10 +282,9 @@ public class frmMain extends javax.swing.JFrame
      */
     public static void main(String args[])
     {
-
         try
         {
-            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         }
         catch (Exception ex)
         {
@@ -288,7 +309,6 @@ public class frmMain extends javax.swing.JFrame
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JProgressBar jProgressBar1;
     private javax.swing.JTextField jTextFieldInstallationPath;
     // End of variables declaration//GEN-END:variables
 }
