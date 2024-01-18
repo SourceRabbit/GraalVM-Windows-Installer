@@ -1,7 +1,6 @@
 package graalvminstallerforwindows.UI;
 
-import graalvminstallerforwindows.Core.Utilities.FileUtils;
-import graalvminstallerforwindows.Core.GraalVMDownloadsManager;
+import graalvminstallerforwindows.Core.DownloadsManager;
 import graalvminstallerforwindows.Core.Installer;
 import graalvminstallerforwindows.Core.Settings;
 import java.io.File;
@@ -10,6 +9,19 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
+/*
+    Copyright (C) 2024 Nikolaos Siatras
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    This software is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    You should have received a copy of the GNU General Public License
+    along with this program.
+ */
 /**
  *
  * @author Nikos Siatras
@@ -18,9 +30,6 @@ public class frmMain extends javax.swing.JFrame
 {
 
     public static frmMain fInstance;
-    private Installer fInstaller;
-
-    private FileUtils fFileUtils;
 
     /**
      * Creates new form frmMain
@@ -29,8 +38,6 @@ public class frmMain extends javax.swing.JFrame
     {
         initComponents();
         frmMain.fInstance = this;
-
-        fFileUtils = new FileUtils();
 
         this.setTitle(this.getTitle() + " v" + Settings.fAppVersion);
         this.setLocationRelativeTo(null);
@@ -201,26 +208,28 @@ public class frmMain extends javax.swing.JFrame
     private void jButtonInstallActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonInstallActionPerformed
     {//GEN-HEADEREND:event_jButtonInstallActionPerformed
         final String installationPath = jTextFieldInstallationPath.getText();
-        final String remoteFilePath = GraalVMDownloadsManager.getAvailableDownloads().get(jComboBoxDownloads.getSelectedItem().toString());
+        final String remoteFilePath = DownloadsManager.getAvailableDownloads().get(jComboBoxDownloads.getSelectedItem().toString());
 
         Installer installer = new Installer(remoteFilePath, installationPath);
         try
         {
-            installer.IntallGrallVM();
+            if (installer.IntallGrallVM())
+            {
+                JOptionPane.showMessageDialog(this, "GraalVM is now installed!\nClick 'OK' to exit", "Installation", JOptionPane.INFORMATION_MESSAGE);
+                this.dispose();
+            }
         }
         catch (Exception ex)
         {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            return;
         }
-
     }//GEN-LAST:event_jButtonInstallActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt)//GEN-FIRST:event_formWindowOpened
     {//GEN-HEADEREND:event_formWindowOpened
         UITools.ShowPleaseWaitDialog("Please Wait", "Updating downloads list from:<br>" + Settings.fDownloadsListFile + "", this, () ->
         {
-            HashMap<String, String> availableDownloads = GraalVMDownloadsManager.getAvailableDownloads();
+            HashMap<String, String> availableDownloads = DownloadsManager.getAvailableDownloads();
             for (String key : availableDownloads.keySet())
             {
                 jComboBoxDownloads.addItem(key);

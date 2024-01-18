@@ -1,6 +1,7 @@
 package graalvminstallerforwindows.Core;
 
 import graalvminstallerforwindows.Core.Utilities.DosPromt;
+import graalvminstallerforwindows.Core.Utilities.EnvironmentVariablesManager;
 import graalvminstallerforwindows.Core.Utilities.FileUtils;
 import graalvminstallerforwindows.Core.Utilities.Unzipper;
 import graalvminstallerforwindows.UI.UITools;
@@ -9,6 +10,19 @@ import graalvminstallerforwindows.UI.frmMain;
 import java.io.File;
 import java.io.FilenameFilter;
 
+/*
+    Copyright (C) 2024 Nikolaos Siatras
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    This software is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    You should have received a copy of the GNU General Public License
+    along with this program.
+ */
 /**
  *
  * @author Nikos Siatras
@@ -28,7 +42,13 @@ public class Installer
         fFileUtils = new FileUtils();
     }
 
-    public void IntallGrallVM() throws Exception
+    /**
+     * Returns true if installation finishes sucessfully
+     *
+     * @return
+     * @throws Exception
+     */
+    public boolean IntallGrallVM() throws Exception
     {
         boolean stepFinished = false;
         STEP1_PrepareInstallationFolder();
@@ -36,23 +56,24 @@ public class Installer
         stepFinished = STEP2_DownloadGraalVM();
         if (!stepFinished)
         {
-            return;
+            return false;
         }
 
         stepFinished = STEP3_UnzipDownloadedFile();
         if (!stepFinished)
         {
-            return;
+            return false;
         }
 
         stepFinished = STEP4_MoveUnzippedGraalVMToInstallationPath();
         if (!stepFinished)
         {
-            return;
+            return false;
         }
 
         STEP5_SetJavaHomePathAndRunJarFix();
 
+        return true;
     }
 
     private void STEP1_PrepareInstallationFolder() throws Exception
@@ -70,7 +91,6 @@ public class Installer
         {
             throw new Exception("Directory '" + fInstallationPath + "' is not empty!\nDelete any files and directories inside the installation path and try again.");
         }
-
     }
 
     private boolean STEP2_DownloadGraalVM() throws Exception
@@ -92,11 +112,14 @@ public class Installer
             try
             {
                 Unzipper.Unzip(fDownloadedZipFilePath, fInstallationPath + "\\Unzipped");
+
+                // Delete GraalVMDownload.zip
+                File fileToDelete = new File(fDownloadedZipFilePath);
+                fileToDelete.delete();
             }
             catch (Exception ex)
             {
             }
-
         });
 
         return true;
@@ -123,14 +146,18 @@ public class Installer
 
     private boolean STEP5_SetJavaHomePathAndRunJarFix() throws Exception
     {
-        String javaHomeCommand = "setx JAVA_HOME " + fInstallationPath;
-        DosPromt.ExecuteDOSPromt(javaHomeCommand);
-
-        String pathCommand = "setx path \"%PATH%; " + fInstallationPath + "\\bin\" /m";
-        DosPromt.ExecuteDOSPromt(javaHomeCommand);
+        try
+        {
+            EnvironmentVariablesManager.SetEnvironmentVariable("JAVA_HOME", fInstallationPath);
+            EnvironmentVariablesManager.AddEnvironmentVariable("PATH", fInstallationPath + "\\bin");
+        }
+        catch (Exception ex)
+        {
+            throw new Exception("Cannot set environment variables!");
+        }
 
         // Call Jar Fix
-        DosPromt.ExecuteDOSPromt("Prerequisites/jarfix.exe/s");
+        DosPromt.ExecuteDOSPromt("Prerequisites/jarfix.exe /s");
         return true;
     }
 
