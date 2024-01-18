@@ -9,6 +9,8 @@ import graalvminstallerforwindows.UI.frmDownloadFile;
 import graalvminstallerforwindows.UI.frmMain;
 import java.io.File;
 import java.io.FilenameFilter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 /*
     Copyright (C) 2024 Nikolaos Siatras
@@ -140,6 +142,8 @@ public class Installer
 
         String sourceDir = fInstallationPath + "\\Unzipped\\" + directories[0];
         fFileUtils.MoveDirContentsToOtherDir(sourceDir, fInstallationPath);
+        
+        Files.delete(Paths.get(fInstallationPath + "\\Unzipped\\"));
 
         return true;
     }
