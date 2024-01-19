@@ -1,7 +1,5 @@
 package graalvminstallerforwindows.Core.Utilities;
 
-import java.util.LinkedList;
-import java.util.stream.Collectors;
 
 /*
     Copyright (C) 2024 Nikolaos Siatras
@@ -32,32 +30,14 @@ public class EnvironmentVariablesManager
     {
         final String dosCommand = "setx " + variable + " \"" + value + ";" + "\"";
         DosPromt.ExecuteDOSPromt(dosCommand);
+        
+        
     }
 
     public static void AddEnvironmentVariable(String variable, String value) throws Exception
     {
-        // Read current values of "Variable"
-        final String currentVariableValuesString = DosPromt.ExecuteDOSPromt("echo %" + variable + "%");
-
-        // Create an array of the values without duplicates
-        final String[] valuesArray = currentVariableValuesString.split(";");
-        final LinkedList<String> nonDuplicateValues = new LinkedList<>();
-        for (String v : valuesArray)
-        {
-            if (!nonDuplicateValues.contains(v) && !v.equals(""))
-            {
-                nonDuplicateValues.add(v);
-            }
-        }
-        // Add the new value to the array
-        if (!nonDuplicateValues.contains(value) && !value.equals(""))
-        {
-            nonDuplicateValues.add(value);
-        }
-
-        // Call the set command
-        final String finalValues = nonDuplicateValues.stream().collect(Collectors.joining(";"));
-        EnvironmentVariablesManager.SetEnvironmentVariable(variable, finalValues);
+        final String currentVariableValuesString = System.getenv(variable);
+        SetEnvironmentVariable(variable, currentVariableValuesString + ";" + value);
     }
 
 }
