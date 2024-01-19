@@ -6,33 +6,23 @@ GraalVM Installer for Windows OS
 
 [![](https://dcbadge.vercel.app/api/server/nRKETyjJ7E)](https://discord.gg/nRKETyjJ7E)
 
-Downloads 
+About 
 ------
-Find the latest version on the following link:<br>
-https://github.com/SourceRabbit/GraalVM-Windows-Installer/releases
+
+GraalVM Installer for Windows is a free and useful tool for anyone who wants to install GraalVM Java Development Kit (JDK) on a computer running Windows operating system. 
 
 <p align="center">
 <img src="https://github.com/SourceRabbit/GraalVM-Windows-Installer/blob/main/Images/HowToUse.gif" alt="GraalVM Installer for Windows">
 </p>
 
+This installer automatically downloads your preferred GraalVM version and sets the appropriate JAVA_HOME and PATH environment variables to your system.
+After the installation completes you will be able to run and develop applications using the GraalVM Java Development Kit.
 
-About 
-------
-
-The main reason we developed GraalVM Installer for Windows is to help anyone using Windows operating system install a <b>fast, reliable and completely free Java Virtual Machine</b> on their computer. 
-
-Oracle has announced that, effective January 2019, Java SE 8 public updates will NO longer be available for "Business, Commercial or Production use" without a commercial license. <b>GraalVM Community version is FREE</b>, it runs programs faster and has lots of useful features for developers.
-
-You can find more information about GraalVM on GraalVM's website:<br>
+You can find more information about GraalVM on the following link:<br>
 <a href="https://www.graalvm.org/">https://www.graalvm.org/</a>
 
-GraalVM Windows Installer is an open source project written in C#, developed with Visual Studio 2019.
-
-FAQ 
+Downloads 
 ------
+Find the latest version on the following link:<br>
+https://github.com/SourceRabbit/GraalVM-Windows-Installer/releases
 
-<b>What is GraalVM Installer for Windows ?</b><br>
-GraalVM Installer for Windows is a free and useful tool for anyone who wants to install Java (JRE and JDK) on a computer with Windows operating system. It will automatically download and install the latest Graal VM Community version on your computer and you will be able to run and develop applications for the Java runtime.
-
-<b>What is GraalVM ?</b><br>
-GraalVM is JVM (Java Virtual Machine) and JDK (Java Development Kit) together, based on HotSpot/OpenJDK. It supports additional programming languages and execution modes, like ahead-of-time compilation of Java applications for fast startup and low memory footprint. The core distribution of GraalVM includes the JVM, the GraalVM compiler, the LLVM runtime, and Node.js JavaScript runtime. Having downloaded and installed GraalVM, you can already run Java, Node.js, JavaScript, and LLVM-based applications.
