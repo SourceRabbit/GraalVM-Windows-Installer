@@ -1,10 +1,14 @@
 package graalvminstallerforwindows.Core.Utilities;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+
 
 /*
     Copyright (C) 2024 Nikolaos Siatras
@@ -105,7 +109,33 @@ public class FileUtils
             }
         }
         return false;
+    }
 
+    public String ReadTextFile(String filePath) throws IOException
+    {
+        String result = "";
+        try (FileReader fr = new FileReader(filePath))
+        {
+            int i;
+            while ((i = fr.read()) != -1)
+            {
+                result += String.valueOf((char) i);
+            }
+            fr.close();
+        }
+        catch (FileNotFoundException ex)
+        {
+
+        }
+        return result;
+    }
+
+    public void SaveTextFile(String filePath, String data) throws IOException
+    {
+        try (FileWriter myWriter = new FileWriter(filePath, false))
+        {
+            myWriter.write(data);
+        }
     }
 
 }

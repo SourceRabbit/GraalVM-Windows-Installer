@@ -4,21 +4,21 @@
   <headerType>gui</headerType>
   <jar>GraalVMInstaller.jar</jar>
   <outfile>C:\Development\GraalVM-Windows-Installer\Launch4J\GraalVMInstaller.exe</outfile>
-  <errTitle></errTitle>
+  <errTitle>You need GraalVM !</errTitle>
   <cmdLine></cmdLine>
   <chdir>.</chdir>
   <priority>normal</priority>
-  <downloadUrl>https://www.java.com/en/download/</downloadUrl>
+  <downloadUrl>https://github.com/SourceRabbit/GraalVM-Windows-Installer</downloadUrl>
   <supportUrl>https://www.sourcerabbit.com</supportUrl>
   <stayAlive>false</stayAlive>
   <restartOnCrash>false</restartOnCrash>
-  <manifest></manifest>
+  <manifest>C:\Development\GraalVM-Windows-Installer\Launch4J\wrapper.manifest</manifest>
   <icon>C:\Development\GraalVM-Windows-Installer\Launch4J\AppIcon.ico</icon>
   <jre>
     <path>jre</path>
     <requiresJdk>false</requiresJdk>
     <requires64Bit>false</requires64Bit>
-    <minVersion>1.0.8</minVersion>
+    <minVersion>17.0.0</minVersion>
     <maxVersion></maxVersion>
   </jre>
   <versionInfo>

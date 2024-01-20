@@ -40,7 +40,7 @@ public class frmMain extends javax.swing.JFrame
         frmMain.fInstance = this;
 
         this.setTitle(this.getTitle() + " v" + Settings.fAppVersion);
-        this.setLocationRelativeTo(null);
+        this.setLocationRelativeTo(null); 
     }
 
     /**

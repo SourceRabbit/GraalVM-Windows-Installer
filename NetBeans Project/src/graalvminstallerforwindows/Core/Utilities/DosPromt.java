@@ -35,13 +35,11 @@ public class DosPromt
         while (true)
         {
             line = r.readLine();
-            result += line;
             if (line == null)
             {
-
                 break;
             }
-
+            result += line;
         }
 
         return result;

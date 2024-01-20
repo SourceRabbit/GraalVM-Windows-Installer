@@ -9,6 +9,7 @@ import graalvminstallerforwindows.UI.frmDownloadFile;
 import graalvminstallerforwindows.UI.frmMain;
 import java.io.File;
 import java.io.FilenameFilter;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -45,7 +46,7 @@ public class Installer
     }
 
     /**
-     * Returns true if installation finishes sucessfully
+     * Returns true if installation finishes successfully
      *
      * @return
      * @throws Exception
@@ -142,7 +143,7 @@ public class Installer
 
         String sourceDir = fInstallationPath + "\\Unzipped\\" + directories[0];
         fFileUtils.MoveDirContentsToOtherDir(sourceDir, fInstallationPath);
-        
+
         Files.delete(Paths.get(fInstallationPath + "\\Unzipped\\"));
 
         return true;
@@ -160,8 +161,24 @@ public class Installer
             throw new Exception("Cannot set environment variables!");
         }
 
-        // Call Jar Fix
-        DosPromt.ExecuteDOSPromt("Prerequisites/jarfix.exe /s");
+        // Call Jar Fix !!
+        try
+        {
+            // Create a new  jarfix.ini
+            String jarFixIniText = fFileUtils.ReadTextFile("Prerequisites/jarfix_template.ini");
+            String newIniFile = jarFixIniText.replace("#PATH_TO_GRAALVM#", fInstallationPath);
+            fFileUtils.SaveTextFile("Prerequisites/jarfix.ini", newIniFile);
+
+            // Run jarfix.exe
+            final String userDir = System.getProperty("user.dir");
+            String jarFixRunCommand = userDir + "\\Prerequisites\\jarfix.exe";
+            DosPromt.ExecuteDOSPromt(jarFixRunCommand);
+        }
+        catch (IOException ex)
+        {
+            throw new Exception("Could not run JAR Fix!");
+        }
+
         return true;
     }
 

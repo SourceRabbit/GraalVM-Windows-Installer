@@ -1,5 +1,9 @@
 package graalvminstallerforwindows.Core.Utilities;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 
 /*
     Copyright (C) 2024 Nikolaos Siatras
@@ -20,24 +24,39 @@ package graalvminstallerforwindows.Core.Utilities;
  */
 public class EnvironmentVariablesManager
 {
-
+    
     public EnvironmentVariablesManager()
     {
-
+        
     }
-
+    
     public static void SetEnvironmentVariable(String variable, String value) throws Exception
     {
         final String dosCommand = "setx " + variable + " \"" + value + ";" + "\"";
         DosPromt.ExecuteDOSPromt(dosCommand);
         
-        
     }
-
+    
     public static void AddEnvironmentVariable(String variable, String value) throws Exception
     {
-        final String currentVariableValuesString = System.getenv(variable);
-        SetEnvironmentVariable(variable, currentVariableValuesString + ";" + value);
-    }
+        final String[] currentValues = DosPromt.ExecuteDOSPromt("echo %" + variable + "%").split(";");
 
+        // C:\Development\GraalVM-Windows-Installer\NetBeans Project\00_Release\jre\bin
+        final String userDir = System.getProperty("user.dir");
+        ArrayList<String> finalValues = new ArrayList<>();
+        for (String s : currentValues)
+        {
+            if (!s.equals("null") && !s.equals("") && !s.equals(value) && !finalValues.contains(s) && !s.startsWith(userDir))
+            {
+                finalValues.add(s);
+            }
+        }
+        finalValues.add(value);
+        
+        final String newValuesString = finalValues.stream().collect(Collectors.joining(";"));
+
+        //final String currentVariableValuesString = System.getenv(variable);
+        SetEnvironmentVariable(variable, newValuesString);
+    }
+    
 }
