@@ -24,7 +24,7 @@ import java.io.InputStreamReader;
 public class DosPromt
 {
 
-    public static String ExecuteDOSPromt(String command) throws IOException
+    public static String ExecuteDOSPromtAndGetResult(String command) throws IOException
     {
         String result = "";
         ProcessBuilder builder = new ProcessBuilder("cmd.exe", "/c", command);
@@ -43,5 +43,12 @@ public class DosPromt
         }
 
         return result;
+    }
+
+    public static void ExecuteDosPromtAndWaitToFinish(String command) throws InterruptedException, IOException
+    {
+        ProcessBuilder builder = new ProcessBuilder("cmd.exe", "/c", command);
+        Process p = builder.start();
+        int exitVal = p.waitFor();
     }
 }

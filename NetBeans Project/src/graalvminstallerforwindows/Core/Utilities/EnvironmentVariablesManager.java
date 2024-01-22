@@ -1,7 +1,6 @@
 package graalvminstallerforwindows.Core.Utilities;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.stream.Collectors;
 
 
@@ -24,39 +23,39 @@ import java.util.stream.Collectors;
  */
 public class EnvironmentVariablesManager
 {
-    
+
     public EnvironmentVariablesManager()
     {
-        
+
     }
-    
+
     public static void SetEnvironmentVariable(String variable, String value) throws Exception
     {
-        final String dosCommand = "setx " + variable + " \"" + value + ";" + "\"";
-        DosPromt.ExecuteDOSPromt(dosCommand);
-        
+        final String dosCommand = "setx /M " + variable + " \"" + value + "\"";
+        DosPromt.ExecuteDosPromtAndWaitToFinish(dosCommand);
     }
-    
+
     public static void AddEnvironmentVariable(String variable, String value) throws Exception
     {
-        final String[] currentValues = DosPromt.ExecuteDOSPromt("echo %" + variable + "%").split(";");
+        final String[] currentValues = DosPromt.ExecuteDOSPromtAndGetResult("echo %" + variable + "%").split(";");
 
-        // C:\Development\GraalVM-Windows-Installer\NetBeans Project\00_Release\jre\bin
-        final String userDir = System.getProperty("user.dir");
+        final String appPath = System.getProperty("user.dir");
         ArrayList<String> finalValues = new ArrayList<>();
         for (String s : currentValues)
         {
-            if (!s.equals("null") && !s.equals("") && !s.equals(value) && !finalValues.contains(s) && !s.startsWith(userDir))
+            if (!s.equals("null") && !s.equals("") && !s.equals(value) && !finalValues.contains(s) && !s.startsWith(appPath) && !s.contains("\""))
             {
                 finalValues.add(s);
             }
         }
         finalValues.add(value);
-        
-        final String newValuesString = finalValues.stream().collect(Collectors.joining(";"));
 
-        //final String currentVariableValuesString = System.getenv(variable);
-        SetEnvironmentVariable(variable, newValuesString);
+        // CAUTION --  ADD ';' at the end!
+        final String newValuesString = finalValues.stream().collect(Collectors.joining(";")) + ";";
+
+        final String dosCommand = "setx /M " + variable + " \"" + newValuesString + "\"";
+        DosPromt.ExecuteDosPromtAndWaitToFinish(dosCommand);
+
     }
-    
+
 }

@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "GraalVM Installer"
-#define MyAppVersion "2.0.1"
+#define MyAppVersion "2.0.2"
 #define MyAppPublisher "SourceRabbit"
 #define MyAppURL "https://www.sourcerabbit.com/"
 #define MyAppExeName "GraalVMInstaller.exe"

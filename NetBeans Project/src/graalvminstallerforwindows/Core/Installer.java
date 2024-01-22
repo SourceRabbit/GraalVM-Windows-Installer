@@ -36,6 +36,7 @@ public class Installer
     private final String fDownloadURL, fInstallationPath;
     private final String fDownloadedZipFilePath;
     private final FileUtils fFileUtils;
+    private boolean fEnvironmentVariablesAreSet = false;
 
     public Installer(String downloadURL, String installationPath)
     {
@@ -151,12 +152,33 @@ public class Installer
 
     private boolean STEP5_SetJavaHomePathAndRunJarFix() throws Exception
     {
-        try
+
+        UITools.ShowPleaseWaitDialog("Please wait", "Setting Environment variables...", frmMain.fInstance, () ->
         {
-            EnvironmentVariablesManager.SetEnvironmentVariable("JAVA_HOME", fInstallationPath);
-            EnvironmentVariablesManager.AddEnvironmentVariable("PATH", fInstallationPath + "\\bin");
-        }
-        catch (Exception ex)
+            try
+            {
+                EnvironmentVariablesManager.SetEnvironmentVariable("JAVA_HOME", fInstallationPath);
+                EnvironmentVariablesManager.AddEnvironmentVariable("PATH", fInstallationPath + "\\bin\\");
+                fEnvironmentVariablesAreSet = true;
+            }
+            catch (Exception ex)
+            {
+                fEnvironmentVariablesAreSet = false;
+                return;
+            }
+
+            try
+            {
+                // Wait 2 seconds before run JarFix
+                Thread.sleep(2000);
+            }
+            catch (Exception ex)
+            {
+
+            }
+        });
+
+        if (!fEnvironmentVariablesAreSet)
         {
             throw new Exception("Cannot set environment variables!");
         }
@@ -172,7 +194,7 @@ public class Installer
             // Run jarfix.exe
             final String userDir = System.getProperty("user.dir");
             String jarFixRunCommand = userDir + "\\Prerequisites\\jarfix.exe";
-            DosPromt.ExecuteDOSPromt(jarFixRunCommand);
+            DosPromt.ExecuteDosPromtAndWaitToFinish(jarFixRunCommand);
         }
         catch (IOException ex)
         {
