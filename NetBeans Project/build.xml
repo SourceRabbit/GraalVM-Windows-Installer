@@ -11,36 +11,20 @@
     <description>Builds, tests, and runs the project GraalVMInstallerForWindows.</description>
     <import file="nbproject/build-impl.xml"/>
     
-    
     <!-- Το παρακάτω Target Δημιουργεί ένα FAT Jar -->
     <target name="00-Release-Fat-Jar" depends="jar">
-        <!-- Change the value of this property to be the name of your JAR,
-             minus the .jar extension. It should not have spaces.
-             <property name="store.jar.name" value="MyJarName"/>
-        -->
+      
         <property name="store.jar.name" value="GraalVMInstaller"/>
-        <!-- don't edit below this line -->
         <property name="store.dir" value="00_Release"/>
         <property name="store.jar" value="${store.dir}/${store.jar.name}.jar"/>
-        <echo message="Packaging ${application.title} into a single JAR at ${store.jar}"/>
+        
+        <!-- Create the Release Dir-->
         <delete dir="${store.dir}"/>
         <mkdir dir="${store.dir}"/>
-       
-        <!-- Για να κάνει copy το Bundled JRE στο directory 00-Release-Fat-Jar -->
-        <copy todir="${store.dir}/jre">
-            <fileset dir="BundledJRE"/>
-        </copy>
         
         
-        <!-- Για να κάνει copy το Prerequisites στο directory 00-Release-Fat-Jar -->
-        <copy todir="${store.dir}/Prerequisites">
-            <fileset dir="Prerequisites"/>
-        </copy>
-        
-        <copy tofile="${store.dir}/GraalVMInstaller.exe">
-            <fileset file="C:/Development/GraalVM-Windows-Installer/Launch4J/GraalVMInstaller.exe"/>
-        </copy>
-        
+        <!-- Creates a FAT Jar-->
+        <echo message="Packaging ${application.title} into a single JAR at ${store.jar}"/>
         <jar destfile="${store.dir}/temp_final.jar" filesetmanifest="skip">
             <zipgroupfileset dir="dist" includes="*.jar"/>
             <manifest>
@@ -51,6 +35,22 @@
             <zipfileset src="${store.dir}/temp_final.jar" excludes="META-INF/*.SF, META-INF/*.DSA, META-INF/*.RSA"/>
         </zip>
         <delete file="${store.dir}/temp_final.jar"/>
+
+       
+        <!-- Extracting JRE-->
+        <echo message="Extracting JRE..."/>
+        <unzip src="BundledJRE/jre.zip" dest="${store.dir}/jre"/>
+        
+        <!-- Copy Prerequisites -->
+        <echo message="Copying Prerequisites"/>
+        <copy todir="${store.dir}/Prerequisites">
+            <fileset dir="Prerequisites"/>
+        </copy>
+        
+        <copy tofile="${store.dir}/GraalVMInstaller.exe">
+            <fileset file="C:/Development/GraalVM-Windows-Installer/Launch4J/GraalVMInstaller.exe"/>
+        </copy>
+
     </target>
     
 </project>
