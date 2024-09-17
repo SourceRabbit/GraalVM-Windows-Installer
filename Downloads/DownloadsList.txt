@@ -1,3 +1,4 @@
+GraalVM Java 23|https://download.oracle.com/graalvm/23/latest/graalvm-jdk-23_windows-x64_bin.zip
 GraalVM Java 22|https://download.oracle.com/graalvm/22/latest/graalvm-jdk-22_windows-x64_bin.zip
 GraalVM Java 21|https://download.oracle.com/graalvm/21/latest/graalvm-jdk-21_windows-x64_bin.zip
 GraalVM Java 17|https://download.oracle.com/graalvm/17/latest/graalvm-jdk-17_windows-x64_bin.zip
