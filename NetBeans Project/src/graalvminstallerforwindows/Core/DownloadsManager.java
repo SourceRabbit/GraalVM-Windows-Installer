@@ -2,6 +2,7 @@ package graalvminstallerforwindows.Core;
 
 import graalvminstallerforwindows.Core.Utilities.HTTPRequestData;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 /*
     Copyright (C) 2024 Nikolaos Siatras
@@ -24,11 +25,11 @@ import java.util.HashMap;
 public class DownloadsManager
 {
 
-    private static final HashMap<String, String> fDownloads;
+    private static final LinkedHashMap<String, String> fDownloads;
 
     static
     {
-        fDownloads = new HashMap<>();
+        fDownloads = new LinkedHashMap<>();
     }
 
     /**

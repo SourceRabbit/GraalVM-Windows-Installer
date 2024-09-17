@@ -20,63 +20,61 @@ package graalvminstallerforwindows.Core.Threading;
 public class ManualResetEvent
 {
 
-    private boolean fInitialState;
+    private final Object fLock = new Object();
+    private volatile boolean fIsOpen;
 
     public ManualResetEvent(boolean initialState)
     {
-        fInitialState = initialState;
+        fIsOpen = initialState;
     }
 
-    public synchronized void Reset()
+    public void Reset()
     {
-        fInitialState = false;
+        fIsOpen = false;
     }
 
-    public synchronized void WaitOne()
+    public void WaitOne()
     {
-        while (!fInitialState)
+        synchronized (fLock)
         {
-            try
+            while (!fIsOpen)
             {
-                wait();
-            }
-            catch (InterruptedException ex)
-            {
-            }
-        }
-    }
-
-    public synchronized void WaitOne(long milliseconds) throws InterruptedException
-    {
-        if (!fInitialState)
-        {
-            wait(milliseconds);
-        }
-    }
-
-    public synchronized void WaitWithoutException(long milliseconds)
-    {
-        try
-        {
-            if (!fInitialState)
-            {
-                wait(milliseconds);
+                try
+                {
+                    fLock.wait();
+                }
+                catch (InterruptedException ex)
+                {
+                }
             }
         }
-        catch (Exception ex)
-        {
+    }
 
+    public boolean WaitOne(long milliseconds) throws InterruptedException
+    {
+        synchronized (fLock)
+        {
+            if (fIsOpen)
+            {
+                return true;
+            }
+
+            fLock.wait(milliseconds);
+            return fIsOpen;
         }
     }
 
-    public synchronized void Set()
+    public void Set()
     {
-        fInitialState = true;
-        notify();
+        synchronized (fLock)
+        {
+            fIsOpen = true;
+            fLock.notifyAll();
+        }
     }
 
     public boolean getState()
     {
-        return fInitialState;
+        return fIsOpen;
     }
 }
