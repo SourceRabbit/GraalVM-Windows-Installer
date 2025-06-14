@@ -1,6 +1,5 @@
 GraalVM Java 24 Community Edition|https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-24.0.1/graalvm-community-jdk-24.0.1_windows-x64_bin.zip
 GraalVM Java 24|https://download.oracle.com/graalvm/24/latest/graalvm-jdk-24_windows-x64_bin.zip
-GraalVM Java 23|https://download.oracle.com/graalvm/23/latest/graalvm-jdk-23_windows-x64_bin.zip
 GraalVM Java 21|https://download.oracle.com/graalvm/21/latest/graalvm-jdk-21_windows-x64_bin.zip
+GraalVM Java 21 Community Edition|https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-21.0.2/graalvm-community-jdk-21.0.2_windows-x64_bin.zip
 GraalVM Java 17|https://download.oracle.com/graalvm/17/latest/graalvm-jdk-17_windows-x64_bin.zip
-GraalVM Community Edition Java 21|https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-21.0.2/graalvm-community-jdk-21.0.2_windows-x64_bin.zip
