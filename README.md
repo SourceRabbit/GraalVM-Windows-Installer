@@ -22,7 +22,6 @@
 
 <br clear="left"/>
 
----
 
 [![](https://dcbadge.vercel.app/api/server/nRKETyjJ7E)](https://discord.gg/nRKETyjJ7E)
 
