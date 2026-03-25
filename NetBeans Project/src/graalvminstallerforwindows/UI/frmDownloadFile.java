@@ -1,14 +1,3 @@
-package graalvminstallerforwindows.UI;
-
-import graalvminstallerforwindows.Core.Threading.ManualResetEvent;
-import java.io.BufferedOutputStream;
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import javax.swing.SwingUtilities;
-
 /*
     Copyright (C) 2024 Nikolaos Siatras
     This program is free software: you can redistribute it and/or modify
@@ -22,6 +11,17 @@ import javax.swing.SwingUtilities;
     You should have received a copy of the GNU General Public License
     along with this program.
  */
+package graalvminstallerforwindows.UI;
+
+import graalvminstallerforwindows.Core.Threading.ManualResetEvent;
+import java.io.BufferedOutputStream;
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import javax.swing.SwingUtilities;
+
 /**
  *
  * @author Nikos Siatras
@@ -59,7 +59,7 @@ public class frmDownloadFile extends javax.swing.JDialog
 
     public boolean OpenAndDownloadFile()
     {
-        fDownloadFinishedSucessfully = true;
+        fDownloadFinishedSucessfully = false;
         this.setVisible(true);
         return fDownloadFinishedSucessfully;
     }
@@ -155,35 +155,36 @@ public class frmDownloadFile extends javax.swing.JDialog
 
                 HttpURLConnection httpConnection = (HttpURLConnection) (url.openConnection());
                 long completeFileSize = httpConnection.getContentLength();
-                java.io.BufferedInputStream in = new java.io.BufferedInputStream(httpConnection.getInputStream());
-                java.io.FileOutputStream fos = new java.io.FileOutputStream(fPathToSaveFile);
-                java.io.BufferedOutputStream bout = new BufferedOutputStream(fos, 1024);
-                byte[] data = new byte[1024];
-                long downloadedFileSize = 0;
 
-                int x1 = 0;
-                while (fKeepDownloadThreadRunning && (x1 = in.read(data, 0, 1024)) >= 0)
+                // Try with resources for streams
+                try (java.io.BufferedInputStream in = new java.io.BufferedInputStream(httpConnection.getInputStream()); java.io.FileOutputStream fos = new java.io.FileOutputStream(fPathToSaveFile); java.io.BufferedOutputStream bout = new BufferedOutputStream(fos, 1024);)
                 {
-                    downloadedFileSize += x1;
+                    byte[] data = new byte[1024];
+                    long downloadedFileSize = 0;
 
-                    // Update Progress
-                    final double currentProgress = (((double) downloadedFileSize * 100.00d) / (double) completeFileSize);
-
-                    SwingUtilities.invokeLater(() ->
+                    int x1 = 0;
+                    while (fKeepDownloadThreadRunning && (x1 = in.read(data, 0, 1024)) >= 0)
                     {
-                        jProgressBar1.setValue((int) currentProgress);
-                        jProgressBar1.setString(String.format("%.2f", currentProgress) + "%");
-                    });
-                    bout.write(data, 0, x1);
+                        downloadedFileSize += x1;
+
+                        // Update Progress
+                        final double currentProgress = (((double) downloadedFileSize * 100.00d) / (double) completeFileSize);
+
+                        SwingUtilities.invokeLater(() ->
+                        {
+                            jProgressBar1.setValue((int) currentProgress);
+                            jProgressBar1.setString(String.format("%.2f", currentProgress) + "%");
+                        });
+                        bout.write(data, 0, x1);
+                    }
                 }
-                bout.close();
-                in.close();
             }
             catch (IOException | URISyntaxException ex)
             {
                 System.err.println(ex.getMessage());
             }
 
+            fDownloadFinishedSucessfully = true;
             fWaitForDownloadToFinish.Set();
             this.dispose();
         };

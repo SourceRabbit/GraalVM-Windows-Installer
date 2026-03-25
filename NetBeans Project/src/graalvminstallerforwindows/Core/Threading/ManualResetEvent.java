@@ -1,5 +1,3 @@
-package graalvminstallerforwindows.Core.Threading;
-
 /*
     Copyright (C) 2024 Nikolaos Siatras
     This program is free software: you can redistribute it and/or modify
@@ -13,6 +11,8 @@ package graalvminstallerforwindows.Core.Threading;
     You should have received a copy of the GNU General Public License
     along with this program.
  */
+package graalvminstallerforwindows.Core.Threading;
+
 /**
  *
  * @author Nikos Siatras

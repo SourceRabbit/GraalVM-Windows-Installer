@@ -1,9 +1,3 @@
-package graalvminstallerforwindows.Core.Utilities;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-
 /*
     Copyright (C) 2024 Nikolaos Siatras
     This program is free software: you can redistribute it and/or modify
@@ -17,11 +11,17 @@ import java.io.InputStreamReader;
     You should have received a copy of the GNU General Public License
     along with this program.
  */
+package graalvminstallerforwindows.Core.Utilities;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
 /**
  *
  * @author Nikos Siatras
  */
-public class DosPromt
+public class DosPrompt
 {
 
     public static String ExecuteDOSPromtAndGetResult(String command) throws IOException

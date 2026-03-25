@@ -1,9 +1,3 @@
-package graalvminstallerforwindows.Core.Utilities;
-
-import java.util.ArrayList;
-import java.util.stream.Collectors;
-
-
 /*
     Copyright (C) 2024 Nikolaos Siatras
     This program is free software: you can redistribute it and/or modify
@@ -17,6 +11,11 @@ import java.util.stream.Collectors;
     You should have received a copy of the GNU General Public License
     along with this program.
  */
+package graalvminstallerforwindows.Core.Utilities;
+
+import java.util.ArrayList;
+import java.util.stream.Collectors;
+
 /**
  *
  * @author Nikos Siatras
@@ -32,12 +31,12 @@ public class EnvironmentVariablesManager
     public static void SetEnvironmentVariable(String variable, String value) throws Exception
     {
         final String dosCommand = "setx /M " + variable + " \"" + value + "\"";
-        DosPromt.ExecuteDosPromtAndWaitToFinish(dosCommand);
+        DosPrompt.ExecuteDosPromtAndWaitToFinish(dosCommand);
     }
 
     public static void AddEnvironmentVariable(String variable, String value) throws Exception
     {
-        final String[] currentValues = DosPromt.ExecuteDOSPromtAndGetResult("echo %" + variable + "%").split(";");
+        final String[] currentValues = DosPrompt.ExecuteDOSPromtAndGetResult("echo %" + variable + "%").split(";");
 
         final String appPath = System.getProperty("user.dir");
         ArrayList<String> finalValues = new ArrayList<>();
@@ -54,7 +53,7 @@ public class EnvironmentVariablesManager
         final String newValuesString = finalValues.stream().collect(Collectors.joining(";")) + ";";
 
         final String dosCommand = "setx /M " + variable + " \"" + newValuesString + "\"";
-        DosPromt.ExecuteDosPromtAndWaitToFinish(dosCommand);
+        DosPrompt.ExecuteDosPromtAndWaitToFinish(dosCommand);
 
     }
 

@@ -1,5 +1,3 @@
-package graalvminstallerforwindows.Core;
-
 /*
     Copyright (C) 2024 Nikolaos Siatras
     This program is free software: you can redistribute it and/or modify
@@ -13,6 +11,7 @@ package graalvminstallerforwindows.Core;
     You should have received a copy of the GNU General Public License
     along with this program.
  */
+package graalvminstallerforwindows.Core;
 
 /**
  *
@@ -21,6 +20,6 @@ package graalvminstallerforwindows.Core;
 public class Settings
 {
 
-    public static final String fAppVersion = "2.0.3";
+    public static final String fAppVersion = "2.0.4";
     public static final String fDownloadsListFile = "https://raw.githubusercontent.com/SourceRabbit/GraalVM-Windows-Installer/main/Downloads/DownloadsList.txt";
 }

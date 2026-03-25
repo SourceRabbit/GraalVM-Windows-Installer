@@ -1,18 +1,3 @@
-package graalvminstallerforwindows.Core;
-
-import graalvminstallerforwindows.Core.Utilities.DosPromt;
-import graalvminstallerforwindows.Core.Utilities.EnvironmentVariablesManager;
-import graalvminstallerforwindows.Core.Utilities.FileUtils;
-import graalvminstallerforwindows.Core.Utilities.Unzipper;
-import graalvminstallerforwindows.UI.UITools;
-import graalvminstallerforwindows.UI.frmDownloadFile;
-import graalvminstallerforwindows.UI.frmMain;
-import java.io.File;
-import java.io.FilenameFilter;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-
 /*
     Copyright (C) 2024 Nikolaos Siatras
     This program is free software: you can redistribute it and/or modify
@@ -26,6 +11,21 @@ import java.nio.file.Paths;
     You should have received a copy of the GNU General Public License
     along with this program.
  */
+package graalvminstallerforwindows.Core;
+
+import graalvminstallerforwindows.Core.Utilities.DosPrompt;
+import graalvminstallerforwindows.Core.Utilities.EnvironmentVariablesManager;
+import graalvminstallerforwindows.Core.Utilities.FileUtils;
+import graalvminstallerforwindows.Core.Utilities.Unzipper;
+import graalvminstallerforwindows.UI.UITools;
+import graalvminstallerforwindows.UI.frmDownloadFile;
+import graalvminstallerforwindows.UI.frmMain;
+import java.io.File;
+import java.io.FilenameFilter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 /**
  *
  * @author Nikos Siatras
@@ -76,7 +76,6 @@ public class Installer
         }
 
         STEP5_SetJavaHomePathAndRunJarFix();
-
         return true;
     }
 
@@ -194,7 +193,7 @@ public class Installer
             // Run jarfix.exe
             final String userDir = System.getProperty("user.dir");
             String jarFixRunCommand = userDir + "\\Prerequisites\\jarfix.exe";
-            DosPromt.ExecuteDosPromtAndWaitToFinish(jarFixRunCommand);
+            DosPrompt.ExecuteDosPromtAndWaitToFinish(jarFixRunCommand);
         }
         catch (IOException ex)
         {

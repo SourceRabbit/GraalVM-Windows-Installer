@@ -1,11 +1,3 @@
-package graalvminstallerforwindows.Core.Utilities;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 
 /*
     Copyright (C) 2024 Nikolaos Siatras
@@ -20,6 +12,15 @@ import java.util.zip.ZipInputStream;
     You should have received a copy of the GNU General Public License
     along with this program.
  */
+package graalvminstallerforwindows.Core.Utilities;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+
 /**
  *
  * @author Nikos Siatras

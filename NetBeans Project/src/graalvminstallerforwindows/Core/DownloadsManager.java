@@ -1,9 +1,3 @@
-package graalvminstallerforwindows.Core;
-
-import graalvminstallerforwindows.Core.Utilities.HTTPRequestData;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-
 /*
     Copyright (C) 2024 Nikolaos Siatras
     This program is free software: you can redistribute it and/or modify
@@ -17,6 +11,11 @@ import java.util.LinkedHashMap;
     You should have received a copy of the GNU General Public License
     along with this program.
  */
+package graalvminstallerforwindows.Core;
+
+import graalvminstallerforwindows.Core.Utilities.HTTPRequestData;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 /**
  *

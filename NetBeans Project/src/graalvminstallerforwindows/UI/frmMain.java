@@ -1,14 +1,3 @@
-package graalvminstallerforwindows.UI;
-
-import graalvminstallerforwindows.Core.DownloadsManager;
-import graalvminstallerforwindows.Core.Installer;
-import graalvminstallerforwindows.Core.Settings;
-import java.io.File;
-import java.util.HashMap;
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
-import javax.swing.UIManager;
-
 /*
     Copyright (C) 2024 Nikolaos Siatras
     This program is free software: you can redistribute it and/or modify
@@ -22,6 +11,17 @@ import javax.swing.UIManager;
     You should have received a copy of the GNU General Public License
     along with this program.
  */
+package graalvminstallerforwindows.UI;
+
+import graalvminstallerforwindows.Core.DownloadsManager;
+import graalvminstallerforwindows.Core.Installer;
+import graalvminstallerforwindows.Core.Settings;
+import java.io.File;
+import java.util.HashMap;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.UIManager;
+
 /**
  *
  * @author Nikos Siatras
@@ -40,7 +40,7 @@ public class frmMain extends javax.swing.JFrame
         frmMain.fInstance = this;
 
         this.setTitle(this.getTitle() + " v" + Settings.fAppVersion);
-        this.setLocationRelativeTo(null); 
+        this.setLocationRelativeTo(null);
     }
 
     /**
