@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "GraalVM Installer"
-#define MyAppVersion "2.0.3"
+#define MyAppVersion "2.0.4"
 #define MyAppPublisher "SourceRabbit"
 #define MyAppURL "https://www.sourcerabbit.com/"
 #define MyAppExeName "GraalVMInstaller.exe"
@@ -21,11 +21,11 @@ AppPublisherURL         = {#MyAppURL}
 AppSupportURL           = {#MyAppURL}
 AppUpdatesURL           = {#MyAppURL}
 
-; Αυτό αλλάζειτο εικονίδιο του installer
-;SetupIconFile           = C:\Development\RabbitCAM\Launch4J\AppIcon.ico
+; Αυτό αλλάζει το εικονίδιο του installer
+;SetupIconFile           = C:\Development\SourceRabbit\RabbitCAM\Launch4J\AppIcon.ico
 
 ; Αυτό αλλάζει το εικονίδιο του uninstaller μέσα στo Add-Remove Programs των Windows
-UninstallDisplayIcon     = C:\Development\GraalVM-Windows-Installer\Launch4J\AppIcon.ico
+UninstallDisplayIcon     = C:\Development\SourceRabbit\GraalVM-Windows-Installer\Launch4J\AppIcon.ico
 
 DefaultDirName          = {commonpf64}\SourceRabbit\{#MyAppName}
 ChangesAssociations     = yes
@@ -44,10 +44,10 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; 
 
 [Files]
-Source: "C:\Development\GraalVM-Windows-Installer\NetBeans Project\00_Release\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Development\GraalVM-Windows-Installer\NetBeans Project\00_Release\GraalVMInstaller.jar"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Development\GraalVM-Windows-Installer\NetBeans Project\00_Release\jre\*"; DestDir: "{app}\jre"; Flags: ignoreversion recursesubdirs
-Source: "C:\Development\GraalVM-Windows-Installer\NetBeans Project\00_Release\Prerequisites\*"; DestDir: "{app}\Prerequisites"; Flags: ignoreversion recursesubdirs
+Source: "C:\Development\SourceRabbit\GraalVM-Windows-Installer\NetBeans Project\00_Release\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Development\SourceRabbit\GraalVM-Windows-Installer\NetBeans Project\00_Release\GraalVMInstaller.jar"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Development\SourceRabbit\GraalVM-Windows-Installer\NetBeans Project\00_Release\jre\*"; DestDir: "{app}\jre"; Flags: ignoreversion recursesubdirs
+Source: "C:\Development\SourceRabbit\GraalVM-Windows-Installer\NetBeans Project\00_Release\Prerequisites\*"; DestDir: "{app}\Prerequisites"; Flags: ignoreversion recursesubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Registry]
