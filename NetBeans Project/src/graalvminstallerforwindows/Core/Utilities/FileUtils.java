@@ -13,6 +13,7 @@
  */
 package graalvminstallerforwindows.Core.Utilities;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -119,21 +120,19 @@ public class FileUtils
 
     public String ReadTextFile(String filePath) throws IOException
     {
-        String result = "";
-        try (FileReader fr = new FileReader(filePath))
+        // Use String Builder to build the String
+        StringBuilder result = new StringBuilder();
+
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath)))
         {
             int i;
-            while ((i = fr.read()) != -1)
+            while ((i = br.read()) != -1)
             {
-                result += String.valueOf((char) i);
+                result.append((char) i);
             }
-            fr.close();
         }
-        catch (FileNotFoundException ex)
-        {
 
-        }
-        return result;
+        return result.toString();
     }
 
     public void SaveTextFile(String filePath, String data) throws IOException
