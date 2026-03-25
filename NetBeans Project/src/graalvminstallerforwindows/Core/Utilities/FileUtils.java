@@ -55,13 +55,20 @@ public class FileUtils
     public boolean CheckIfDirectoryExistsAndItIsEmpty(String path)
     {
         File dir = new File(path);
-        boolean dirIsEmpty = false;
-        if (dir.exists())
+
+        // Check if dir exists
+        if (!dir.exists() || !dir.isDirectory())
         {
-            dirIsEmpty = dir.listFiles().length == 0;
+            return false;
         }
 
-        return dirIsEmpty;
+        File[] files = dir.listFiles();
+        if (files == null)
+        {
+            return false;
+        }
+
+        return files.length == 0;
     }
 
     /**

@@ -48,7 +48,7 @@
         </copy>
         
         <copy tofile="${store.dir}/GraalVMInstaller.exe">
-            <fileset file="C:/Development/GraalVM-Windows-Installer/Launch4J/GraalVMInstaller.exe"/>
+            <fileset file="C:/Development/SourceRabbit/GraalVM-Windows-Installer/Launch4J/GraalVMInstaller.exe"/>
         </copy>
 
     </target>
